@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Expenses</title>
+  <h1>All your expenses</h1>
+</head>
+<body>
+  {% for i in data %}
+  <div class="expense">
+    <div><h2>{{i.value}} {{i.currency}}</h2></div>
+    <div><h3>{{i.purpose}}</h3></div>
+    <div><h3>{{i.date}}</h3></div>
+  </div>
+  {% endfor %}
+</body>
+<style>
+    .expense {
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: darkgray;
+    }
+    h1 {
+        align-content: center;
+    }
+
+</style>
+</html>

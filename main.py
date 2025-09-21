@@ -1,0 +1,64 @@
+from http.client import responses
+from locale import currency
+
+import json
+
+import flask
+from flask import Flask
+from flask import url_for, redirect
+from flask import render_template, request
+import requests
+import json
+from sqlalchemy import Table, Column ,create_engine , String, ForeignKey
+from typing import List, Optional
+from sqlalchemy.orm import DeclarativeBase , sessionmaker, Mapped, mapped_column, relationship
+
+app = Flask(__name__)
+
+engine = create_engine("sqlite:///expenses.db",echo=True)
+Session = sessionmaker(bind=engine)
+
+class Base(DeclarativeBase):
+    def create_db(self):
+        Base.metadata.create_all(engine)
+    def drop_db(self):
+        Base.metadata.drop_all(engine)
+
+class Expenses(Base):
+    __tablename__ = "expenses"
+    id : Mapped[int] = mapped_column(primary_key=True)
+    value: Mapped[float] = mapped_column()
+    currency: Mapped[str] = mapped_column(String(3))
+    purpose: Mapped[str] = mapped_column(String(50))
+    date : Mapped[str] = mapped_column(String(50))
+
+# base = Base()
+# base.create_db()
+
+@app.route('/exp', methods=['GET','POST'])
+def get_info():
+    if request.method == 'GET':
+        return render_template('index.html')
+    else:
+        value = int(request.form['value'])
+        currency = request.form['currency']
+        purpose = request.form['purpose']
+        date = request.form['date']
+
+        with Session() as session:
+            new_expense = Expenses(value=value, currency=currency, purpose=purpose, date=date)
+            session.add(new_expense)
+            session.commit()
+
+        return redirect(url_for("all_exps"))
+
+@app.route('/all_expenses')
+def all_exps():
+    with Session() as view:
+        data = view.query(Expenses).all()
+        return render_template('all_expenses.html', data=data)
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True, port=8000)

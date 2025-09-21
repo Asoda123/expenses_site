@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Expense</title>
+    <h1>New Expense</h1>
+</head>
+<body>
+<form action="/exp" method="post">
+    <div>
+    <input type="text" name="value" placeholder="Amount of money" required>
+    </div>
+    <div>
+        <select name="currency" required>
+            <option value="UAH">₴</option>
+            <option value="EUR">€</option>
+            <option value="USD">$</option>
+        </select>
+    </div>
+    <div>
+    <select name="purpose" required>
+        <option value="cafes">Cafes and restaurants</option>
+        <option value="leisure">Leisure</option>
+        <option value="groceries">Groceries</option>
+        <option value="rent">Rent</option>
+    </select>
+    </div>
+    <div>
+    <input type="date" name="date" placeholder="Date" required>
+    </div>
+    <input type="submit" value="Submit">
+
+</form>
+    <a href="/all_expenses">
+        <button>See all expenses</button>
+    </a>
+</body>
+
+</html>
