@@ -72,13 +72,18 @@ def reg():
     else:
         login = request.form['login']
         password = request.form['password']
-
         with Session() as sess:
-            new_us = Users(login=login, password=password)
-            sess.add(new_us)
-            sess.commit()
+            find_user = sess.query(Users).filter_by(login=login).first()
+            if find_user is None:
+                with Session() as sess1:
+                    new_us = Users(login=login, password=password)
+                    sess1.add(new_us)
+                    sess1.commit()
+                    return redirect(url_for('get_info'))
+            else:
+                return render_template('reg.html', message='This login is used.')
 
-        return redirect(url_for('get_info'))
+
 
 @app.route('/sign_in', methods=['GET','POST'])
 def sign_in():
